@@ -1,11 +1,11 @@
 const createRequest = require('./index').createRequest
+const { worldCupRequest } = require('./controllers/worldCupController');
 
 const express = require('express')
-const bodyParser = require('body-parser')
-const app = express()
-const port = process.env.EA_PORT || 8080
+const app = express();
+const port = process.env.PORT || 5000
 
-app.use(bodyParser.json())
+app.use(express.json())
 
 app.post('/', (req, res) => {
   console.log('POST Data: ', req.body)
@@ -14,5 +14,7 @@ app.post('/', (req, res) => {
     res.status(status).json(result)
   })
 })
+
+app.post('/worldCup', worldCupRequest);
 
 app.listen(port, () => console.log(`Listening on port ${port}!`))
