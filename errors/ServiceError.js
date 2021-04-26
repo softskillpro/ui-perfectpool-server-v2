@@ -1,13 +1,13 @@
 class ServiceError extends Error {
-    constructor({ message, service } = {}) {
-        super()
+  constructor ({ message, service } = {}) {
+    super()
 
-        this.name = 'ServiceError'
-        this.message = message
-        this.service = service
-    }
+    this.name = 'ServiceError'
+    this.message = message
+    this.service = service
+  }
 }
 
 module.exports = {
-    ServiceError: ServiceError
+  ServiceError: ServiceError
 }
