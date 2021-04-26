@@ -1,0 +1,27 @@
+name: Tests
+
+on: [push]
+
+jobs:
+  LintAndTest:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [14.x]
+
+    steps:
+      - uses: actions/checkout@v1
+      - name: Setup Node Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Install
+        run: |
+          yarn
+      - name: Lint
+        run: yarn eslint .
+      - name: Test
+        run: yarn test
+        env:
+          CI: true

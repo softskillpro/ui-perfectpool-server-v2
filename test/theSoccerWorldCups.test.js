@@ -1,15 +1,26 @@
 const assert = require('chai').assert
-const { scrapSoccerWorldCupsByYear } = require('../services/theSoccerWorldCups');
+const supertest = require('supertest')
+
+const app = require('../app')
+
+const request = supertest(app)
 
 describe('The Soccer World Cups', () => {
-    it.only('01 - should correctly scrap score results', async () => {
-        const resultsScrapped = await scrapSoccerWorldCupsByYear(2014);
-        assert.isNotEmpty(resultsScrapped);
-    });
-    it.skip('02 - should correctly convert scrapped results to winners string', async () => {
-        // TODO winner string test
-    });
-    it.skip('03 - should correctly convert winners string to hex', async () => {
-        // TODO hex result
-    });
+  it('should correctly scrap score results', (done) => {
+    request
+      .post('/worldCup')
+      .then((res) => {
+        const body = res.body
+
+        assert.equal(res.status, 200)
+        assert.equal(body.statusCode, 200)
+        assert.equal(body.jobRunID, 1)
+        assert.isNotEmpty(body.data)
+        assert.match(body.data.result, /^0x[\d\w]{63}7$/)
+        assert.match(body.result, /^0x[\d\w]{63}7$/)
+
+        done()
+      })
+      .catch(err => done(err))
+  })
 })

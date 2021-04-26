@@ -6,10 +6,7 @@ module.exports = {
     mocha: true
   },
   extends: [
-    'standard',
-    {
-      semi: true
-    }
+    'standard'
   ],
   globals: {
     Atomics: 'readonly',
