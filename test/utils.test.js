@@ -3,7 +3,7 @@ const assert = require('chai').assert
 const constants = require('./helpers/constants')
 
 const { swap } = require('../utils/swap')
-const { swapFinalAnd3rdPlaces, scoresToWinnerString, winnersStringToHex } = require('../utils/worldCupParser')
+const { swapFinalAnd3rdPlaces, scoresToWinnerString, winnersStringToHex } = require('../utils/sportsradarParser')
 
 describe('swap', () => {
   it('should swap array positions', () => {
