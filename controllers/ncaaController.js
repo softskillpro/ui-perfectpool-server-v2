@@ -14,16 +14,15 @@ const { getTournamentResult: getTournamentResultWithSportsDataIo } = require('..
  * @return {Object} json in Chainlink Requester format with jobRunID, status and match results in hex
  */
 module.exports.ncaaRequest = async (req, res) => {
-  let { jobRunID, tournamentId } = req.query
+  let { jobRunID, season } = req.query
   jobRunID = jobRunID || 1
-  tournamentId = tournamentId || '6b1b9057-68b6-4705-9642-0d5e5f2c9dd1'
-  const season = '2021'
+  season = season || '2021'
 
   try {
-    const hexResult1 = await getTournamentResultWithSportsRadar(tournamentId)
-    console.log('hexResult1', hexResult1)
+    const hexResult1 = await getTournamentResultWithSportsRadar(season)
     const hexResult2 = await getTournamentResultWithSportsDataIo(season)
-    console.log('hexResult2', hexResult2)
+    // console.log('hexResult1', hexResult1)
+    // console.log('hexResult2', hexResult2)
     const responseResult = {
       data: {
         result: hexResult1

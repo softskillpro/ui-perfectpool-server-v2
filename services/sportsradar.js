@@ -1,6 +1,6 @@
 const axios = require('axios')
 const { getTournamentResultsArray } = require('../utils/sportsradarParser')
-const { getResultsHex } = require('../utils/helper')
+const { getResultsHex, sleep } = require('../utils/helper')
 
 const { ServiceError } = require('../errors/ServiceError')
 
@@ -26,13 +26,27 @@ function getURL (apiString) {
  * @return {Promise} promise returning the match results array or error
  */
 async function getTournamentResult (tournamentId) {
-  return getTournamentSchedule(tournamentId)
+  return getTournaments(tournamentId)
+    .then(getTournament)
     .then(getTournamentResultsArray)
     .then(getResultsHex)
     .catch(throwApplicationError)
 }
 
-async function getTournamentSchedule (tournamentId) {
+async function getTournaments (season) {
+  config.url = getURL(`tournaments/${parseInt(season) - 1}/pst/schedule`)
+
+  return axios(config)
+    .then(({ data }) => {
+      const ncaaTournament = data.tournaments.find(tournament => tournament.name === "NCAA Men's Division I Basketball Tournament")
+      return ncaaTournament.id
+    })
+    .catch(throwApplicationError)
+}
+
+async function getTournament (tournamentId) {
+  await sleep(1000)
+
   config.url = getURL(`tournaments/${tournamentId}/schedule`)
 
   return axios(config)
@@ -45,7 +59,7 @@ async function getTournamentSchedule (tournamentId) {
 function throwApplicationError (error) {
   throw new ServiceError({
     message: error.message,
-    service: 'SoccerWorldCups'
+    service: 'SportsRadar'
   })
 }
 

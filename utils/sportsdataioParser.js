@@ -28,16 +28,16 @@ function sortAndEncode (games) {
     }
   })
   resultsArray.push(1)
+
   return resultsArray
 }
 
 module.exports.getTournamentResultsArray = (rounds) => {
   const tournamentRounds = rounds.reduce((acc, currVal) => {
-    if ((currVal.Bracket != null && currVal.Round != null) || currVal.Round === 6) {
+    if ((currVal.Bracket != null && currVal.Round != null) || currVal.Round > 0) {
       acc.push(currVal)
     }
     return acc
   }, [])
-
   return sortAndEncode(tournamentRounds)
 }

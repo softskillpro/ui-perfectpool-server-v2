@@ -7,3 +7,9 @@ module.exports.getResultsHex = (resultsArray) => {
 
   return hexArray1.concat(hexArray2)
 }
+
+module.exports.sleep = (ms) => {
+  return new Promise((resolve) => {
+    setTimeout(resolve, ms)
+  })
+}

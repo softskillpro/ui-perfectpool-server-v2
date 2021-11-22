@@ -44,7 +44,7 @@ async function getTournamentScores (season) {
 function throwApplicationError (error) {
   throw new ServiceError({
     message: error.message,
-    service: 'SoccerWorldCups'
+    service: 'SportsDataIO'
   })
 }
 
