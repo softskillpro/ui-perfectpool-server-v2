@@ -13,3 +13,18 @@ module.exports.sleep = (ms) => {
     setTimeout(resolve, ms)
   })
 }
+
+module.exports.findFrequent = (arr) => {
+  const countMap = {}
+  let freqElement
+  let maxCount = 1
+  for (let i = 0; i < arr.length; i++) {
+    const el = arr[i]
+    if (countMap[el] == null) { countMap[el] = 1 } else { countMap[el]++ }
+    if (countMap[el] > maxCount) {
+      freqElement = el
+      maxCount = countMap[el]
+    }
+  }
+  return { element: freqElement, count: maxCount }
+}
