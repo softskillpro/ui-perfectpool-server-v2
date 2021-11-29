@@ -5,10 +5,10 @@ const app = require('../app')
 
 const request = supertest(app)
 
-describe('The Soccer World Cups', () => {
-  it('should correctly scrap score results', (done) => {
+describe('The NCAA Basketball', () => {
+  it('should correctly fetch score results', (done) => {
     request
-      .post('/worldCup')
+      .post('/ncaa')
       .then((res) => {
         const body = res.body
 
