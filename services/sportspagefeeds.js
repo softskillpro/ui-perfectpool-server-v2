@@ -1,18 +1,23 @@
 const axios = require('axios')
-const { getTournamentResultsArray } = require('../utils/sportsdataioParser')
+const { getTournament, getTournamentSchedule } = require('./sportsradar')
+const { getTournamentResultsArray } = require('../utils/sportspagefeedsParser')
 const { getResultsHex } = require('../utils/helper')
 
 const { ServiceError } = require('../errors/ServiceError')
 
-const API_KEY = 'aa595fa4f83a4657abc53bdbd60f35ec'
+const API_KEY = '40ac80710emsh1cbf4b4a579cd2cp1c2749jsn6afba898ac04'
 
 const config = {
   method: 'get',
-  url: ''
+  url: '',
+  headers: {
+    'x-rapidapi-host': 'sportspage-feeds.p.rapidapi.com',
+    'x-rapidapi-key': API_KEY
+  }
 }
 
 function getURL (apiString) {
-  return `https://api.sportsdata.io/v3/cbb/scores/json/${apiString}?key=${API_KEY}`
+  return `https://sportspage-feeds.p.rapidapi.com/${apiString}`
 }
 
 /**
@@ -24,19 +29,22 @@ function getURL (apiString) {
  * @param {Integer} season to be scrapped
  * @return {Promise} promise returning the match results array or error
  */
-async function getTournamentResult (season) {
-  return getTournamentScores(season)
+function getTournamentResult (season) {
+  return getGames(season)
     .then(getTournamentResultsArray)
     .then(getResultsHex)
     .catch(throwApplicationError)
 }
 
-async function getTournamentScores (season) {
-  config.url = getURL(`Tournament/${season}`)
+async function getGames (season) {
+  const { start_date: startDate, end_date: endDate, id } = await getTournament(season)
+  const rounds = await getTournamentSchedule({ id })
+
+  config.url = getURL(`games?league=NCAAB&date=${startDate},${endDate}`)
 
   return axios(config)
     .then(({ data }) => {
-      return data.Games
+      return { rounds, results: data.results }
     })
     .catch(throwApplicationError)
 }
@@ -44,7 +52,7 @@ async function getTournamentScores (season) {
 function throwApplicationError (error) {
   throw new ServiceError({
     message: error.message,
-    service: 'SportsDataIO'
+    service: 'SportsPageFeeds'
   })
 }
 

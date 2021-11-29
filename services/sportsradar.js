@@ -22,12 +22,12 @@ function getURL (apiString) {
  * Scrape the match results of the world cup contest from The Soccer World Cups website
  *
  * @name getTournamentResult
- * @param {Integer} year to be scrapped
+ * @param {Integer} season to be scrapped
  * @return {Promise} promise returning the match results array or error
  */
-async function getTournamentResult (tournamentId) {
-  return getTournaments(tournamentId)
-    .then(getTournament)
+async function getTournamentResult (season) {
+  return getTournament(season)
+    .then(getTournamentSchedule)
     .then(getTournamentResultsArray)
     .then(getResultsHex)
     .catch(throwApplicationError)
@@ -38,13 +38,20 @@ async function getTournaments (season) {
 
   return axios(config)
     .then(({ data }) => {
-      const ncaaTournament = data.tournaments.find(tournament => tournament.name === "NCAA Men's Division I Basketball Tournament")
-      return ncaaTournament.id
+      return data.tournaments
     })
     .catch(throwApplicationError)
 }
 
-async function getTournament (tournamentId) {
+async function getTournament (season) {
+  return getTournaments(season)
+    .then((tournaments) => {
+      return tournaments.find(tournament => tournament.name === "NCAA Men's Division I Basketball Tournament")
+    })
+    .catch(throwApplicationError)
+}
+
+async function getTournamentSchedule ({ id: tournamentId }) {
   await sleep(1000)
 
   config.url = getURL(`tournaments/${tournamentId}/schedule`)
@@ -63,4 +70,8 @@ function throwApplicationError (error) {
   })
 }
 
-module.exports.getTournamentResult = getTournamentResult
+module.exports = {
+  getTournamentResult,
+  getTournament,
+  getTournamentSchedule
+}

@@ -3,6 +3,7 @@ const { Requester } = require('@chainlink/external-adapter')
 const { findFrequent } = require('../utils/helper')
 const { getTournamentResult: getTournamentResultWithSportsRadar } = require('../services/sportsradar')
 const { getTournamentResult: getTournamentResultWithSportsDataIo } = require('../services/sportsdataio')
+const { getTournamentResult: getTournamentResultWithSportsPageFeeds } = require('../services/sportspagefeeds')
 
 /**
  * ### ncaaRequest (req, res)
@@ -23,8 +24,11 @@ module.exports.ncaaRequest = async (req, res) => {
     const hexResults = []
     const hexResult1 = await getTournamentResultWithSportsRadar(season)
     const hexResult2 = await getTournamentResultWithSportsDataIo(season)
+    const hexResult3 = await getTournamentResultWithSportsPageFeeds(season)
     hexResults.push(hexResult1)
     hexResults.push(hexResult2)
+    hexResults.push(hexResult3)
+    // console.log('hexResults', hexResults)
     const result = findFrequent(hexResults)
     if (result.count > 1) {
       const responseResult = {

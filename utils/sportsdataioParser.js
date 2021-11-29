@@ -1,6 +1,6 @@
 const regions = ['East', 'West', 'South', 'Midwest']
 
-function sortAndEncode (games) {
+function sortTournamentGames (games) {
   function compare (a, b) {
     let regionA = a.Bracket
     let regionB = b.Bracket
@@ -18,26 +18,28 @@ function sortAndEncode (games) {
     }
   }
 
-  const resultsArray = []
-  const sortedGames = games.sort(compare)
-  sortedGames.forEach((data) => {
-    if (data.HomeTeamScore > data.AwayTeamScore) {
-      resultsArray.push(1)
-    } else {
-      resultsArray.push(0)
-    }
-  })
-  resultsArray.push(1)
-
-  return resultsArray
-}
-
-module.exports.getTournamentResultsArray = (rounds) => {
-  const tournamentRounds = rounds.reduce((acc, currVal) => {
+  const tournamentGames = games.reduce((acc, currVal) => {
     if ((currVal.Bracket != null && currVal.Round != null) || currVal.Round > 0) {
       acc.push(currVal)
     }
     return acc
   }, [])
-  return sortAndEncode(tournamentRounds)
+
+  return tournamentGames.sort(compare)
+}
+
+function encode (game) {
+  return (game.HomeTeamScore > game.AwayTeamScore) ? 1 : 0
+}
+
+function getTournamentResultsArray (games) {
+  const resultsArray = []
+  sortTournamentGames(games).forEach((game) => resultsArray.push(encode(game)))
+  resultsArray.push(1)
+
+  return resultsArray
+}
+
+module.exports = {
+  getTournamentResultsArray
 }

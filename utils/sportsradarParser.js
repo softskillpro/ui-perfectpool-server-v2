@@ -1,6 +1,6 @@
 const regions = ['East Regional', 'West Regional', 'South Regional', 'Midwest Regional']
 
-function sortAndEncode (games) {
+function sort (games) {
   function compare (a, b) {
     a = a.title.toString()
     a = a.charAt(a.length - 1)
@@ -10,29 +10,17 @@ function sortAndEncode (games) {
     return a - b
   }
 
-  const subResults = []
-  const sortedGames = games.sort(compare)
-  sortedGames.forEach((data) => {
-    if (data.home_points > data.away_points) {
-      subResults.push(1)
-    } else {
-      subResults.push(0)
-    }
-  })
-  return subResults
+  return games.sort(compare)
 }
 
-module.exports.getTournamentResultsArray = (rounds) => {
-  const resultsArray = []
-  const tournamentRounds = rounds.reduce((acc, currVal) => {
-    if (currVal.name !== 'First Four') {
-      acc.push(currVal)
-    }
-    return acc
-  }, [])
+function encode (game) {
+  return (game.home_points > game.away_points) ? 1 : 0
+}
 
-  tournamentRounds.forEach(async (round) => {
-    if (round.bracketed.length !== 0) {
+function sortTournamentGames (rounds) {
+  const games = []
+  rounds.forEach((round) => {
+    if ((round.name !== 'First Four') && (round.bracketed.length !== 0)) {
       const bracketed = round.bracketed
       const reducedObj = bracketed.reduce((acc, currVal) => {
         acc[currVal.bracket.name] = currVal
@@ -40,17 +28,28 @@ module.exports.getTournamentResultsArray = (rounds) => {
       }, {})
 
       for (const reg of regions) {
-        if (reducedObj[reg]) resultsArray.push(...sortAndEncode(reducedObj[reg].games))
+        if (reducedObj[reg]) games.push(...sort(reducedObj[reg].games))
       }
-    }
-    if (round.name === 'Final Four') {
-      resultsArray.push(...sortAndEncode(round.games))
-    }
-    if (round.name === 'National Championship') {
-      resultsArray.push(round.games[0].home_points > round.games[0].away_points ? 1 : 0)
+    } else if (round.name === 'Final Four') {
+      games.push(...sort(round.games))
+    } else if (round.name === 'National Championship') {
+      games.push(round.games[0])
     }
   })
+
+  return games
+}
+
+function getTournamentResultsArray (rounds) {
+  const resultsArray = []
+
+  sortTournamentGames(rounds).forEach((game) => resultsArray.push(encode(game)))
   resultsArray.push(1)
 
   return resultsArray
+}
+
+module.exports = {
+  getTournamentResultsArray,
+  sortTournamentGames
 }
