@@ -16,8 +16,8 @@ describe('The NCAA Basketball', () => {
         assert.equal(body.statusCode, 200)
         assert.equal(body.jobRunID, 1)
         assert.isNotEmpty(body.data)
-        assert.match(body.data.result, /^0x[\d\w]{63}7$/)
-        assert.match(body.result, /^0x[\d\w]{63}7$/)
+        assert.match(body.data.result, /[A-Fa-f0-9]{16}$/)
+        assert.match(body.result, /[A-Fa-f0-9]{16}$/)
 
         done()
       })
