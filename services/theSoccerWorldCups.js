@@ -2,12 +2,22 @@ const axios = require('axios')
 const cheerio = require('cheerio')
 
 const { ServiceError } = require('../errors/ServiceError')
+const { swapFinalAnd3rdPlaces, getResultString } = require('../utils/worldCupParser')
+const { resultStringToHex } = require('../utils/helper')
 
 const baseURL = 'http://www.thesoccerworldcups.com'
 
 const config = {
   method: 'get',
   url: ''
+}
+
+async function getWCResult (season) {
+  return scrapSoccerWorldCupsByYear(season)
+    .then(swapFinalAnd3rdPlaces)
+    .then(getResultString)
+    .then(resultStringToHex)
+    .catch(throwApplicationError)
 }
 
 /**
@@ -110,12 +120,12 @@ function getWorldCupResults ({ data }) {
 
 // TODO use this?
 function throwApplicationError (error) {
-  const serviceError = new ServiceError({
+  throw new ServiceError({
     message: error.message,
     service: 'SoccerWorldCups'
   })
-
-  throw serviceError
 }
 
-module.exports.scrapSoccerWorldCupsByYear = scrapSoccerWorldCupsByYear
+module.exports = {
+  getWCResult
+}

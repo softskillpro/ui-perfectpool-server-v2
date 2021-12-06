@@ -3,7 +3,7 @@ const assert = require('chai').assert
 const constants = require('./helpers/constants')
 
 const { swap } = require('../utils/swap')
-const { swapFinalAnd3rdPlaces, scoresToWinnerString, winnersStringToHex } = require('../utils/worldCupParser')
+const { swapFinalAnd3rdPlaces, getResultString, resultStringToHex } = require('../utils/worldCupParser')
 
 describe('swap', () => {
   it('should swap array positions', () => {
@@ -28,24 +28,24 @@ describe('worldCupParser', () => {
     })
   })
 
-  describe('scoresToWinnerString', () => {
+  describe('getResultString', () => {
     it('01 - should convert scores array of strings to winners string', () => {
-      const convertedWinnersString = scoresToWinnerString(constants.scoresArrayString)
+      const convertedWinnersString = getResultString(constants.scoresArrayString)
       assert.equal(convertedWinnersString, constants.winnersStringMultipleOf4)
     })
     it('02 - should convert scores array of integers to winners string', () => {
-      const convertedWinnersString = scoresToWinnerString(constants.scoresArrayInt)
+      const convertedWinnersString = getResultString(constants.scoresArrayInt)
       assert.equal(convertedWinnersString, constants.winnersStringMultipleOf4)
     })
   })
 
-  describe('winnersStringToHex', () => {
+  describe('resultStringToHex', () => {
     it('01 - should convert winners string not multiple of 4 to hex', () => {
-      const convertedWinnersHex = winnersStringToHex(constants.winnersStringNotMultipleOf4)
+      const convertedWinnersHex = resultStringToHex(constants.winnersStringNotMultipleOf4)
       assert.equal(convertedWinnersHex, constants.winnersHexNotMultipleOf4)
     })
     it('02 - should convert winners string multiple of 4 to hex', () => {
-      const convertedWinnersHex = winnersStringToHex(constants.winnersStringMultipleOf4)
+      const convertedWinnersHex = resultStringToHex(constants.winnersStringMultipleOf4)
       assert.equal(convertedWinnersHex, constants.winnersHexMultipleOf4)
     })
   })
