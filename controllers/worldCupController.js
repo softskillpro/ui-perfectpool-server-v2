@@ -1,9 +1,10 @@
 const { Requester } = require('@chainlink/external-adapter')
 
 const { findFrequent } = require('../utils/helper')
-const { getWCResult: getWCResultWithTheSoccerWorldCups } = require('../services/theSoccerWorldCups')
+// const { getWCResult: getWCResultWithTheSoccerWorldCups } = require('../services/theSoccerWorldCups')
 const { getWCResult: getWCResultWithSportsRadar } = require('../services/sportsradar')
 const { getWCResult: getWCResultWithAPIFootball } = require('../services/apifootball')
+const { getWCResult: getWCResultWithSportMonks } = require('../services/sportmonks')
 
 /**
  * ### worldCupRequest (req, res)
@@ -22,12 +23,14 @@ module.exports.worldCupRequest = async (req, res) => {
 
   try {
     const hexResults = []
-    const hexResult1 = await getWCResultWithTheSoccerWorldCups(year)
+    // const hexResult1 = await getWCResultWithTheSoccerWorldCups(year)
     const hexResult2 = await getWCResultWithSportsRadar(year)
     const hexResult3 = await getWCResultWithAPIFootball(year)
-    hexResults.push(hexResult1)
+    const hexResult4 = await getWCResultWithSportMonks(year)
+    // hexResults.push(hexResult1)
     hexResults.push(hexResult2)
     hexResults.push(hexResult3)
+    hexResults.push(hexResult4)
     // console.log('hexResults', hexResults)
     const result = findFrequent(hexResults)
     if (result.count > 1) {
