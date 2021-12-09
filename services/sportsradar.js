@@ -34,6 +34,7 @@ async function getTournamentResult (season) {
 }
 
 async function getTournaments (season) {
+  await sleep(1000)
   config.url = getURL(`tournaments/${parseInt(season) - 1}/pst/schedule`)
 
   return axios(config)
@@ -53,7 +54,6 @@ async function getTournament (season) {
 
 async function getTournamentSchedule ({ id: tournamentId }) {
   await sleep(1000)
-
   config.url = getURL(`tournaments/${tournamentId}/schedule`)
 
   return axios(config)
