@@ -34,6 +34,8 @@ async function getWCResult (season) {
 }
 
 async function getSeasons () {
+  await sleep(1000)
+
   config.url = getURL('seasons')
 
   return axios(config)

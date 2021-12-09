@@ -1,4 +1,4 @@
-const { swap } = require('./swap')
+const { swap } = require('./helper')
 
 /**
  * ### swapFinalAnd3rdPlaces (scores)

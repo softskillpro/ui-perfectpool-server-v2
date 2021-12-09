@@ -5,7 +5,7 @@ const app = require('../app')
 
 const request = supertest(app)
 
-describe('The Soccer World Cups', () => {
+describe('The World Cups', () => {
   it('should correctly scrap score results', (done) => {
     request
       .post('/worldCup')
