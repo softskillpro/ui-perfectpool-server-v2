@@ -17,13 +17,13 @@ function getURL (apiString) {
 }
 
 /**
- * ### getTournamentResult (year)
+ * ### getTournamentResult (season)
  *
- * Scrape the match results of the world cup contest from The Soccer World Cups website
+ * Return the match results of the NCAA Basketball from sportsradar.us API
  *
  * @name getTournamentResult
- * @param {Integer} season to be scrapped
- * @return {Promise} promise returning the match results array or error
+ * @param {Integer} season year / season of tournament to get
+ * @return {Promise} promise returning the hex string of match results array or error
  */
 async function getTournamentResult (season) {
   return getTournament(season)
@@ -33,6 +33,15 @@ async function getTournamentResult (season) {
     .catch(throwApplicationError)
 }
 
+/**
+ * ### getTournaments (season)
+ *
+ * Return the all tournaments of the season from API
+ *
+ * @name getTournaments
+ * @param {Integer} season year / season of tournaments to get
+ * @return {Array} tournament list of the season or error
+ */
 async function getTournaments (season) {
   await sleep(1000)
   config.url = getURL(`tournaments/${parseInt(season) - 1}/pst/schedule`)
@@ -44,6 +53,15 @@ async function getTournaments (season) {
     .catch(throwApplicationError)
 }
 
+/**
+ * ### getTournament (season)
+ *
+ * Return the NCAA basketball tournament object of the season from API
+ *
+ * @name getTournament
+ * @param {Integer} season year / season of tournament to get
+ * @return {Object} NCAA basketball tournament object or error
+ */
 async function getTournament (season) {
   return getTournaments(season)
     .then((tournaments) => {
@@ -52,6 +70,15 @@ async function getTournament (season) {
     .catch(throwApplicationError)
 }
 
+/**
+ * ### getTournamentSchedule (season)
+ *
+ * Return the schedule of the tournament
+ *
+ * @name getTournamentSchedule
+ * @param {Object} tournamentId id of tournament
+ * @return {Array} rounds list (schedule) of the tournament or error
+ */
 async function getTournamentSchedule ({ id: tournamentId }) {
   await sleep(1000)
   config.url = getURL(`tournaments/${tournamentId}/schedule`)

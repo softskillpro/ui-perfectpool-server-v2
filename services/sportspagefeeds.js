@@ -21,13 +21,13 @@ function getURL (apiString) {
 }
 
 /**
- * ### getTournamentResult (year)
+ * ### getTournamentResult (season)
  *
- * Scrape the match results of the world cup contest from The Soccer World Cups website
+ * Return the match results of the NCAA Basketball from sportspagefeeds API
  *
  * @name getTournamentResult
- * @param {Integer} season to be scrapped
- * @return {Promise} promise returning the match results array or error
+ * @param {Integer} season year / season of tournament to get
+ * @return {Promise} promise returning the hex string of match results array or error
  */
 function getTournamentResult (season) {
   return getGames(season)
@@ -36,6 +36,15 @@ function getTournamentResult (season) {
     .catch(throwApplicationError)
 }
 
+/**
+ * ### getGames (season)
+ *
+ * Return the match results of the NCAA Basketball from sportsdata.io API
+ *
+ * @name getGames
+ * @param {Integer} season year / season of tournament to get
+ * @return {Object} Object with rounds and games or error
+ */
 async function getGames (season) {
   const { start_date: startDate, end_date: endDate, id } = await getTournament(season)
   const rounds = await getTournamentSchedule({ id })

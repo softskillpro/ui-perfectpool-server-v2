@@ -1,5 +1,14 @@
 const regions = ['East', 'West', 'South', 'Midwest']
 
+/**
+ * ### sortTournamentGames (games)
+ *
+ * Return the sorted match results
+ *
+ * @name sortTournamentGames
+ * @param {Array} games game list of the tournament
+ * @return {Array} sorted game list of the tournament
+ */
 function sortTournamentGames (games) {
   function compare (a, b) {
     let regionA = a.Bracket
@@ -28,14 +37,32 @@ function sortTournamentGames (games) {
   return tournamentGames.sort(compare)
 }
 
-function encode (game) {
+/**
+ * ### encodeGameResult (game)
+ *
+ * Return 0 or 1 for the match result
+ *
+ * @name getTournamentScores
+ * @param {Object} game game object
+ * @return {Integer} 1 or 0
+ */
+function encodeGameResult (game) {
   return (game.HomeTeamScore > game.AwayTeamScore) ? 1 : 0
 }
 
+/**
+ * ### getTournamentResultsArray (games)
+ *
+ * Return the array of 1 or 0 from game list (length is 64)
+ *
+ * @name getTournamentResultsArray
+ * @param {Array} games game list of the tournament
+ * @return {Array} array of 1 or 0 (length is 64)
+ */
 function getTournamentResultsArray (games) {
   const resultsArray = []
-  sortTournamentGames(games).forEach((game) => resultsArray.push(encode(game)))
-  resultsArray.push(1)
+  sortTournamentGames(games).forEach((game) => resultsArray.push(encodeGameResult(game)))
+  resultsArray.push(1) // add 1 item to make array length 64 to hexlify
 
   return resultsArray
 }

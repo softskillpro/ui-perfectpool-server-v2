@@ -16,13 +16,13 @@ function getURL (apiString) {
 }
 
 /**
- * ### getTournamentResult (year)
+ * ### getTournamentResult (season)
  *
- * Scrape the match results of the world cup contest from The Soccer World Cups website
+ * Return the match results of the NCAA Basketball from sportsdata.io API
  *
  * @name getTournamentResult
- * @param {Integer} season to be scrapped
- * @return {Promise} promise returning the match results array or error
+ * @param {Integer} season year / season of tournament to get
+ * @return {Promise} promise returning the hex string of match results array or error
  */
 async function getTournamentResult (season) {
   return getTournamentScores(season)
@@ -31,6 +31,15 @@ async function getTournamentResult (season) {
     .catch(throwApplicationError)
 }
 
+/**
+ * ### getTournamentScores (season)
+ *
+ * Return the match results of the NCAA Basketball from sportsdata.io API
+ *
+ * @name getTournamentScores
+ * @param {Integer} season year / season of tournament to get
+ * @return {Array} game list of the tournament or error
+ */
 async function getTournamentScores (season) {
   config.url = getURL(`Tournament/${season}`)
 
