@@ -4,15 +4,13 @@ const { getResultsHex } = require('../utils/helper')
 
 const { ServiceError } = require('../errors/ServiceError')
 
-const API_KEY = 'aa595fa4f83a4657abc53bdbd60f35ec'
-
 const config = {
   method: 'get',
   url: ''
 }
 
 function getURL (apiString) {
-  return `https://api.sportsdata.io/v3/cbb/scores/json/${apiString}?key=${API_KEY}`
+  return `https://api.sportsdata.io/v3/cbb/scores/json/${apiString}?key=${process.env.SPORTSDATAIO_API_KEY}`
 }
 
 /**

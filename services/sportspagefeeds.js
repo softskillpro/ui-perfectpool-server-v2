@@ -5,19 +5,19 @@ const { getResultsHex } = require('../utils/helper')
 
 const { ServiceError } = require('../errors/ServiceError')
 
-const API_KEY = '40ac80710emsh1cbf4b4a579cd2cp1c2749jsn6afba898ac04'
-
-const config = {
-  method: 'get',
-  url: '',
-  headers: {
-    'x-rapidapi-host': 'sportspage-feeds.p.rapidapi.com',
-    'x-rapidapi-key': API_KEY
-  }
-}
-
 function getURL (apiString) {
   return `https://sportspage-feeds.p.rapidapi.com/${apiString}`
+}
+
+function getConfig (apiString) {
+  return {
+    method: 'get',
+    url: getURL(apiString),
+    headers: {
+      'x-rapidapi-host': 'sportspage-feeds.p.rapidapi.com',
+      'x-rapidapi-key': process.env.SPORTSPAGEFEEDS_API_KEY
+    }
+  }
 }
 
 /**
@@ -49,9 +49,7 @@ async function getGames (season) {
   const { start_date: startDate, end_date: endDate, id } = await getTournament(season)
   const rounds = await getTournamentSchedule({ id })
 
-  config.url = getURL(`games?league=NCAAB&date=${startDate},${endDate}`)
-
-  return axios(config)
+  return axios(getConfig(`games?league=NCAAB&date=${startDate},${endDate}`))
     .then(({ data }) => {
       return { rounds, results: data.results }
     })

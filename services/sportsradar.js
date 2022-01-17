@@ -4,16 +4,13 @@ const { getResultsHex, sleep } = require('../utils/helper')
 
 const { ServiceError } = require('../errors/ServiceError')
 
-const accessLevel = 'trial' // 'production'
-const API_KEY = 'pvdtukgptvfcu3y3aaupfndb'
-
 const config = {
   method: 'get',
   url: ''
 }
 
 function getURL (apiString) {
-  return `https://api.sportradar.us/ncaamb/${accessLevel}/v7/en/${apiString}.json?api_key=${API_KEY}`
+  return `https://api.sportradar.us/ncaamb/${process.env.SPORTSRADAR_ACCESS_LEVEL}/v7/en/${apiString}.json?api_key=${process.env.SPORTSRADAR_API_KEY}`
 }
 
 /**
